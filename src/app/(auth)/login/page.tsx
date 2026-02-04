@@ -21,7 +21,6 @@ function LoginForm() {
   const errorParam = searchParams.get("error");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [type, setType] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(
     errorParam === "CredentialsSignin" ? "Credenciales incorrectas." : null
@@ -35,7 +34,7 @@ function LoginForm() {
       const result = await signIn("credentials", {
         username,
         password,
-        type: type || "",
+        type: "",
         redirect: false,
         callbackUrl: "/",
       });
@@ -102,17 +101,6 @@ function LoginForm() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Contraseña"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="type">Tipo (opcional)</Label>
-              <Input
-                id="type"
-                name="type"
-                type="text"
-                value={type}
-                onChange={(e) => setType(e.target.value)}
-                placeholder="Tipo"
               />
             </div>
             <Button type="submit" className="w-full" disabled={loading}>

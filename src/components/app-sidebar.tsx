@@ -14,6 +14,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from "@/components/ui/sidebar";
 
 const navItems = [
@@ -26,7 +27,12 @@ const navItems = [
 export function AppSidebar() {
   const pathname = usePathname();
   const { data: session } = useSession();
+  const { setOpenMobile, isMobile } = useSidebar();
   const displayName = session?.user?.name ?? "Árbitro";
+
+  const closeSidebar = () => {
+    if (isMobile) setOpenMobile(false);
+  };
 
   return (
     <Sidebar>
@@ -34,7 +40,7 @@ export function AppSidebar() {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton asChild isActive={pathname === "/"} size="lg">
-              <Link href="/" className="flex items-center gap-2">
+              <Link href="/" className="flex items-center gap-2" onClick={closeSidebar}>
                 <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-sidebar-accent text-sidebar-accent-foreground">
                   <User className="size-5" aria-hidden />
                 </span>
@@ -53,7 +59,7 @@ export function AppSidebar() {
               {navItems.map(({ href, label, icon: Icon }) => (
                 <SidebarMenuItem key={href}>
                   <SidebarMenuButton asChild isActive={pathname === href} tooltip={label}>
-                    <Link href={href}>
+                    <Link href={href} onClick={closeSidebar}>
                       <Icon className="size-4" />
                       <span>{label}</span>
                     </Link>
