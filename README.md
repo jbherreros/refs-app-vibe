@@ -1,36 +1,102 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Refs App Vibe – Árbitros de baloncesto
 
-## Getting Started
+Aplicación web para árbitros de baloncesto: partidos, designaciones, liquidaciones y perfil. Integrada con API de federación (FBIB) y ficha de partido (fitxaPartit).
 
-First, run the development server:
+## Características
+
+- **Autenticación**: login con credenciales o API externa (NextAuth v5).
+- **Inicio**: designaciones descargadas/pendientes (si hay), próximo partido con cuenta atrás, logos de equipos y enlace a liquidaciones.
+- **Partidos**: listado de partidos de la semana con escudos, categoría y compañero de arbitraje; detalle de partido (equipos, pabellón, designaciones, clasificación, resultado si existe).
+- **Designaciones**: páginas de designaciones descargadas (con descarga de PDF) y pendientes (con aceptar).
+- **Liquidaciones**: listado de liquidaciones y histórico de pagos.
+- **Perfil**: datos del árbitro.
+- **Splash screen** con logo al cargar la app.
+- **Diseño responsive** con sidebar en escritorio y navegación inferior en móvil.
+
+## Stack
+
+- **Next.js 16** (App Router), **TypeScript**, **Tailwind CSS**
+- **NextAuth v5** (Credentials + JWT, opcional API externa)
+- **shadcn/ui** (Radix, Tailwind)
+- **Lucide React** (iconos)
+
+## Requisitos
+
+- Node.js 18+
+- npm (o pnpm/yarn)
+
+## Instalación y ejecución
+
+1. Clonar el repositorio:
+
+```bash
+git clone https://github.com/manurgz10/refs-app-vibe.git
+cd refs-app-vibe
+```
+
+2. Instalar dependencias:
+
+```bash
+npm install
+```
+
+3. Configurar variables de entorno:
+
+```bash
+cp .env.local.example .env.local
+```
+
+Edita `.env.local` y rellena al menos:
+
+| Variable | Descripción |
+|----------|-------------|
+| `AUTH_SECRET` | Secreto para NextAuth (ej: `openssl rand -base64 32`) |
+| `CREDENTIALS_EMAIL` / `CREDENTIALS_PASSWORD` | Login de desarrollo si no usas API externa |
+| `EXTERNAL_API_URL` | Base URL de la API de federación (si usas API real) |
+| `EXTERNAL_API_LOGIN_URL` | URL de login de la API externa |
+| `FEDERATION_HEADER` | Header Federation (ej: `FBIB`) |
+| `PUBLIC_TOKEN_FBIB` | Token para ficha de partido (fitxaPartit); ver detalle de partido |
+
+Con `USE_MOCK_API=true` la app funciona con datos de prueba sin API externa.
+
+4. Arrancar en desarrollo:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Abre [http://localhost:3000](http://localhost:3000). Serás redirigido a `/login`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+5. Build para producción:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run build
+npm start
+```
 
-## Learn More
+## Estructura del proyecto
 
-To learn more about Next.js, take a look at the following resources:
+```
+src/
+├── app/
+│   ├── (auth)/login/          # Página de login
+│   ├── (dashboard)/          # Rutas tras login
+│   │   ├── page.tsx          # Inicio
+│   │   ├── partidos/         # Listado y detalle /partidos/[id]
+│   │   ├── designaciones-descargadas/
+│   │   ├── designaciones-pendientes/
+│   │   ├── liquidaciones/
+│   │   └── perfil/
+│   ├── api/                  # Rutas API (auth, partidos, designations, etc.)
+│   └── layout.tsx
+├── components/              # UI y componentes (sidebar, splash, designation-row, etc.)
+└── lib/                      # auth, api-client, types, services (partidos, match-detail, etc.)
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Variables de entorno
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Ver [.env.local.example](.env.local.example) para la lista completa y comentarios.
 
-## Deploy on Vercel
+## Licencia
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Proyecto privado.
